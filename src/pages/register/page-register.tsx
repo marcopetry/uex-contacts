@@ -5,6 +5,8 @@ import { useCreateUser } from "../../hooks/use-create-user";
 import { SimpleSnackbar } from "../../ui-components/simple-snack-bar/simple-snack-bar";
 import { useState } from "react";
 import { useRouter } from "@tanstack/react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerSchema } from "./page-register.validation";
 
 type FormValues = {
   name: string;
@@ -13,7 +15,9 @@ type FormValues = {
 };
 
 export const PageRegister = () => {
-  const formProps = useForm<FormValues>();
+  const formProps = useForm<FormValues>({
+    resolver: zodResolver(registerSchema),
+  });
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
 
