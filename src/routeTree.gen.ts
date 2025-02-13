@@ -11,13 +11,13 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AboutImport } from './routes/about'
+import { Route as RegisterImport } from './routes/register'
 
 // Create/Update Routes
 
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
+const RegisterRoute = RegisterImport.update({
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -25,11 +25,11 @@ const AboutRoute = AboutImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
   }
@@ -38,33 +38,33 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/about': typeof AboutRoute
+  '/register': typeof RegisterRoute
 }
 
 export interface FileRoutesByTo {
-  '/about': typeof AboutRoute
+  '/register': typeof RegisterRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/about': typeof AboutRoute
+  '/register': typeof RegisterRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/about'
+  fullPaths: '/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/about'
-  id: '__root__' | '/about'
+  to: '/register'
+  id: '__root__' | '/register'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  AboutRoute: typeof AboutRoute
+  RegisterRoute: typeof RegisterRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  AboutRoute: AboutRoute,
+  RegisterRoute: RegisterRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +77,11 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/about"
+        "/register"
       ]
     },
-    "/about": {
-      "filePath": "about.tsx"
+    "/register": {
+      "filePath": "register.tsx"
     }
   }
 }
