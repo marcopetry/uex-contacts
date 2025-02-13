@@ -1,13 +1,14 @@
-import "./App.css";
+import React, { ReactNode } from "react";
+import { ThemeProvider, CssBaseline, Container } from "@mui/material";
+import theme from "./theme";
 
-function App() {
+const App: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container>{children}</Container>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
