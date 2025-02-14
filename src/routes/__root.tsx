@@ -4,6 +4,7 @@ import { TopAppBar } from "../ui-components/top-app-bar";
 
 export const Route = createRootRoute({
   component: RootComponent,
+  // beforeLoad: () => (window.location.href = "/contacts"),
 });
 
 function RootComponent() {
