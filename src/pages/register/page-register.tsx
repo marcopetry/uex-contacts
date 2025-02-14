@@ -1,4 +1,11 @@
-import { Button, Container, Paper, Stack } from "@mui/material";
+import {
+  Button,
+  Container,
+  Link,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { TextFieldForm } from "../../libs/react-hook-form/text-field-form";
 import { FormProvider, useForm } from "react-hook-form";
 import { useCreateUser } from "../../hooks/use-create-user";
@@ -59,9 +66,12 @@ export const PageRegister = () => {
         <form onSubmit={formProps.handleSubmit(onSubmit)}>
           <FormProvider {...formProps}>
             <Stack>
+              <Typography variant="h4" gutterBottom>
+                Cadastrar minha conta
+              </Typography>
               <TextFieldForm
                 name="name"
-                label="Name"
+                label="Nome"
                 variant="outlined"
                 margin="normal"
               />
@@ -73,11 +83,22 @@ export const PageRegister = () => {
               />
               <TextFieldForm
                 name="password"
-                label="Password"
+                label="Senha"
                 type="password"
                 variant="outlined"
                 margin="normal"
               />
+
+              <Link
+                href="/login"
+                underline="always"
+                textAlign="end"
+                mr={2}
+                my={1}
+              >
+                Já tem conta? Entrar
+              </Link>
+
               <Button
                 type="submit"
                 variant="contained"
@@ -85,7 +106,7 @@ export const PageRegister = () => {
                 fullWidth
                 style={{ marginTop: 16 }}
               >
-                Submit
+                Cadastrar
               </Button>
             </Stack>
           </FormProvider>
