@@ -8,33 +8,84 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from "@tanstack/react-router";
-
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root";
-
-// Create Virtual Routes
-
-const RegisterLazyImport = createFileRoute("/register")();
+import { Route as RegisterImport } from "./routes/register";
+import { Route as LoginImport } from "./routes/login";
+import { Route as ContactsIndexImport } from "./routes/contacts/index";
+import { Route as ContactsCreateImport } from "./routes/contacts/create";
+import { Route as ContactsIdImport } from "./routes/contacts/$id";
 
 // Create/Update Routes
 
-const RegisterLazyRoute = RegisterLazyImport.update({
+const RegisterRoute = RegisterImport.update({
   id: "/register",
   path: "/register",
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/register.lazy").then((d) => d.Route));
+} as any);
+
+const LoginRoute = LoginImport.update({
+  id: "/login",
+  path: "/login",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const ContactsIndexRoute = ContactsIndexImport.update({
+  id: "/contacts/",
+  path: "/contacts/",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const ContactsCreateRoute = ContactsCreateImport.update({
+  id: "/contacts/create",
+  path: "/contacts/create",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const ContactsIdRoute = ContactsIdImport.update({
+  id: "/contacts/$id",
+  path: "/contacts/$id",
+  getParentRoute: () => rootRoute,
+} as any);
 
 // Populate the FileRoutesByPath interface
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
+    "/login": {
+      id: "/login";
+      path: "/login";
+      fullPath: "/login";
+      preLoaderRoute: typeof LoginImport;
+      parentRoute: typeof rootRoute;
+    };
     "/register": {
       id: "/register";
       path: "/register";
       fullPath: "/register";
-      preLoaderRoute: typeof RegisterLazyImport;
+      preLoaderRoute: typeof RegisterImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/contacts/$id": {
+      id: "/contacts/$id";
+      path: "/contacts/$id";
+      fullPath: "/contacts/$id";
+      preLoaderRoute: typeof ContactsIdImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/contacts/create": {
+      id: "/contacts/create";
+      path: "/contacts/create";
+      fullPath: "/contacts/create";
+      preLoaderRoute: typeof ContactsCreateImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/contacts/": {
+      id: "/contacts/";
+      path: "/contacts";
+      fullPath: "/contacts";
+      preLoaderRoute: typeof ContactsIndexImport;
       parentRoute: typeof rootRoute;
     };
   }
@@ -43,33 +94,69 @@ declare module "@tanstack/react-router" {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  "/register": typeof RegisterLazyRoute;
+  "/login": typeof LoginRoute;
+  "/register": typeof RegisterRoute;
+  "/contacts/$id": typeof ContactsIdRoute;
+  "/contacts/create": typeof ContactsCreateRoute;
+  "/contacts": typeof ContactsIndexRoute;
 }
 
 export interface FileRoutesByTo {
-  "/register": typeof RegisterLazyRoute;
+  "/login": typeof LoginRoute;
+  "/register": typeof RegisterRoute;
+  "/contacts/$id": typeof ContactsIdRoute;
+  "/contacts/create": typeof ContactsCreateRoute;
+  "/contacts": typeof ContactsIndexRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
-  "/register": typeof RegisterLazyRoute;
+  "/login": typeof LoginRoute;
+  "/register": typeof RegisterRoute;
+  "/contacts/$id": typeof ContactsIdRoute;
+  "/contacts/create": typeof ContactsCreateRoute;
+  "/contacts/": typeof ContactsIndexRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/register";
+  fullPaths:
+    | "/login"
+    | "/register"
+    | "/contacts/$id"
+    | "/contacts/create"
+    | "/contacts";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/register";
-  id: "__root__" | "/register";
+  to:
+    | "/login"
+    | "/register"
+    | "/contacts/$id"
+    | "/contacts/create"
+    | "/contacts";
+  id:
+    | "__root__"
+    | "/login"
+    | "/register"
+    | "/contacts/$id"
+    | "/contacts/create"
+    | "/contacts/";
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  RegisterLazyRoute: typeof RegisterLazyRoute;
+  LoginRoute: typeof LoginRoute;
+  RegisterRoute: typeof RegisterRoute;
+  ContactsIdRoute: typeof ContactsIdRoute;
+  ContactsCreateRoute: typeof ContactsCreateRoute;
+  ContactsIndexRoute: typeof ContactsIndexRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  RegisterLazyRoute: RegisterLazyRoute,
+  LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
+  ContactsIdRoute: ContactsIdRoute,
+  ContactsCreateRoute: ContactsCreateRoute,
+  ContactsIndexRoute: ContactsIndexRoute,
 };
 
 export const routeTree = rootRoute
@@ -82,11 +169,27 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/register"
+        "/login",
+        "/register",
+        "/contacts/$id",
+        "/contacts/create",
+        "/contacts/"
       ]
     },
+    "/login": {
+      "filePath": "login.tsx"
+    },
     "/register": {
-      "filePath": "register.lazy.tsx"
+      "filePath": "register.tsx"
+    },
+    "/contacts/$id": {
+      "filePath": "contacts/$id.tsx"
+    },
+    "/contacts/create": {
+      "filePath": "contacts/create.tsx"
+    },
+    "/contacts/": {
+      "filePath": "contacts/index.tsx"
     }
   }
 }
