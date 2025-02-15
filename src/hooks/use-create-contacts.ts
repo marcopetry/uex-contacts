@@ -29,16 +29,18 @@ export function useCreateContacts() {
 
   const contactsReposiroty = new ContactsRepository();
 
-  const onSubmit = (data: Contact) => {
+  const onSubmit = async (data: Contact) => {
     console.log({ data });
-    contactsReposiroty.createContact(
-      {
+    try {
+      await contactsReposiroty.createContact({
         ...data,
         ownerEmail: (cookieValue as unknown as User)?.email,
-      },
-      onSuccess,
-      onError
-    );
+      });
+
+      onSuccess();
+    } catch {
+      onError();
+    }
   };
 
   return {
