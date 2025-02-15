@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { CookiesKeys, useCookie } from "../../hooks/use-cookies";
-import { useLocation, useRouter } from "@tanstack/react-router";
+import { Link, useLocation, useRouter } from "@tanstack/react-router";
 
 export const TopAppBar = () => {
   const { cookieValue, removeCookie } = useCookie(CookiesKeys.Auth);
@@ -37,10 +37,23 @@ export const TopAppBar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Aplicativo de contatos
-          </Typography>
-          <Button color="inherit" type="button" onClick={toLogin}>
+
+          <Link to="/contacts" style={{ textDecoration: "none" }}>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1, color: "white" }}
+            >
+              Aplicativo de contatos
+            </Typography>
+          </Link>
+
+          <Button
+            color="inherit"
+            type="button"
+            onClick={toLogin}
+            sx={{ ml: "auto" }}
+          >
             {cookieValue ? "Logout" : "Login"}
           </Button>
         </Toolbar>
