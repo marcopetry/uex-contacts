@@ -9,10 +9,11 @@ type TextFieldFormProps = {
 export const TextFieldForm = ({
   name,
   control,
+  type,
   ...props
 }: TextFieldFormProps) => {
   const {
-    field,
+    field: { onChange, ...field },
     fieldState: { error },
   } = useController({ name, control });
 
@@ -20,6 +21,17 @@ export const TextFieldForm = ({
     <TextField
       {...field}
       {...props}
+      type={type}
+      onChange={(e) => {
+        if (type === "number") {
+          onChange({
+            ...e,
+            target: { ...e.target, value: Number(e.target.value) },
+          });
+        } else {
+          onChange(e);
+        }
+      }}
       error={!!error}
       helperText={error?.message}
     />
