@@ -1,13 +1,21 @@
 import React from "react";
-import { Card, CardContent, Typography, IconButton, Box } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  IconButton,
+  Box,
+  Theme,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Contact } from "../../pages/contacts/contacts-form/validation";
 
 interface CardContactProps {
   contact: Contact;
-  onClick?: VoidFunction;
-  onEdit?: VoidFunction;
+  onClick: VoidFunction;
+  onEdit: VoidFunction;
+  isSelected: boolean;
   onDelete?: VoidFunction;
 }
 
@@ -16,13 +24,17 @@ export const CardContact: React.FC<CardContactProps> = ({
   onClick,
   onEdit,
   onDelete,
+  isSelected,
 }) => {
   return (
     <Card
       sx={{
         minWidth: 275,
         marginBottom: 2,
-        cursor: onClick ? "pointer" : undefined,
+        cursor: "pointer",
+        border: isSelected
+          ? (theme: Theme) => `2px solid ${theme.palette.success.light}`
+          : undefined,
       }}
       onClick={onClick}
     >

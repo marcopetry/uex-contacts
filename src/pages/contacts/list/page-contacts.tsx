@@ -46,6 +46,7 @@ export const PageContacts = () => {
                 setSelectedContacts(contact);
               }}
               onEdit={() => contact.id && onEdit(contact.id?.toString())}
+              isSelected={selectedContacts?.id === contact.id}
             />
           ))}
         </Box>
