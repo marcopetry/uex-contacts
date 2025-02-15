@@ -19,44 +19,41 @@ export interface Contact {
 
 export class ContactsRepository {
   private dbService: IndexedDBService;
+  private dbReady: Promise<void>;
 
   constructor() {
     this.dbService = new IndexedDBService(Stores.Contacts);
+    this.dbReady = this.dbService.dbReady; // Aguarda o banco abrir
   }
 
-  // Adicionar um novo contato
-  public createContact(
-    contact: Contact,
-    onSuccess: () => void,
-    onError: (error: unknown) => void
-  ): void {
-    this.dbService.create(contact, onSuccess, onError);
+  private async ensureDBReady(): Promise<void> {
+    await this.dbReady;
   }
 
-  // Atualizar um contato existente
-  public updateContact<Contact>(
-    contact: Contact,
-    onSuccess: () => void,
-    onError: (error: unknown) => void
-  ): void {
-    this.dbService.put(contact, onSuccess, onError);
+  public async createContact(contact: Contact): Promise<IDBValidKey> {
+    await this.ensureDBReady();
+    return this.dbService.create(contact);
   }
 
-  // Buscar um contato pelo ID
-  public getContactById<Contact>(
-    id: number,
-    onSuccess: (contact: Contact | null) => void,
-    onError: (error: unknown) => void
-  ): void {
-    this.dbService.getById(id, onSuccess, onError);
+  public async updateContact(contact: Contact): Promise<void> {
+    await this.ensureDBReady();
+    return this.dbService.put(contact);
   }
 
-  // Buscar todos os contatos
-  public getAllContacts(
-    onSuccess: (contacts: Contact[]) => void,
-    onError: (error: unknown) => void,
+  public async getContactById(id: number): Promise<Contact | null> {
+    await this.ensureDBReady();
+    return this.dbService.getById(id);
+  }
+
+  public async getAllContacts(
     filter?: (contact: Contact) => boolean
-  ): void {
-    this.dbService.getAll(onSuccess, onError, filter);
+  ): Promise<Contact[]> {
+    await this.ensureDBReady();
+    return this.dbService.getAll(filter);
+  }
+
+  public async getAllContactsByUser(ownerEmail: string): Promise<Contact[]> {
+    await this.ensureDBReady();
+    return this.dbService.getAll((user) => user.ownerEmail === ownerEmail);
   }
 }
