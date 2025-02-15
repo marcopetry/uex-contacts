@@ -1,7 +1,8 @@
 import Cookies from "js-cookie";
+import { User } from "../repositories/users-repository";
 
 interface UseCookieReturn {
-  cookieValue: string | undefined;
+  cookieValue: User | undefined;
   setCookie: (value: string, options?: Cookies.CookieAttributes) => void;
   removeCookie: () => void;
 }
@@ -11,8 +12,9 @@ export enum CookiesKeys {
 }
 
 export const useCookie = (cookieName: CookiesKeys): UseCookieReturn => {
-  const getCookie = (): string | undefined => {
-    return Cookies.get(cookieName);
+  const getCookie = (): User | undefined => {
+    const cookie = Cookies.get(cookieName);
+    return cookie ? JSON.parse(cookie) : cookie;
   };
 
   const setCookie = (
