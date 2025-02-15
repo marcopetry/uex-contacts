@@ -1,7 +1,9 @@
 export const INDEXED_DB_NAME = "uex_store";
+const INDEX_DB_VERSION = 2;
 
 export enum Stores {
   Users = "users",
+  Contacts = "contacts",
 }
 
 export class IndexedDBService {
@@ -14,16 +16,19 @@ export class IndexedDBService {
   }
 
   private openDatabase(): void {
-    const request = indexedDB.open(INDEXED_DB_NAME);
+    const request = indexedDB.open(INDEXED_DB_NAME, INDEX_DB_VERSION);
 
     request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
       const db = (event.target as IDBRequest).result;
-      if (!db.objectStoreNames.contains(this.storeName)) {
-        db.createObjectStore(this.storeName, {
-          keyPath: "id",
-          autoIncrement: true,
-        });
-      }
+
+      Object.values(Stores).forEach((storeName) => {
+        if (!db.objectStoreNames.contains(storeName)) {
+          db.createObjectStore(storeName, {
+            keyPath: "id",
+            autoIncrement: true,
+          });
+        }
+      });
     };
 
     request.onsuccess = (event: Event) => {
