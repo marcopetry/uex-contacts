@@ -13,6 +13,7 @@
 import { Route as rootRoute } from "./routes/__root";
 import { Route as RegisterImport } from "./routes/register";
 import { Route as LoginImport } from "./routes/login";
+import { Route as IndexImport } from "./routes/index";
 import { Route as ContactsIndexImport } from "./routes/contacts/index";
 import { Route as ContactsCreateImport } from "./routes/contacts/create";
 import { Route as ContactsIdImport } from "./routes/contacts/$id";
@@ -28,6 +29,12 @@ const RegisterRoute = RegisterImport.update({
 const LoginRoute = LoginImport.update({
   id: "/login",
   path: "/login",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const IndexRoute = IndexImport.update({
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -53,6 +60,13 @@ const ContactsIdRoute = ContactsIdImport.update({
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
     "/login": {
       id: "/login";
       path: "/login";
@@ -94,6 +108,7 @@ declare module "@tanstack/react-router" {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
+  "/": typeof IndexRoute;
   "/login": typeof LoginRoute;
   "/register": typeof RegisterRoute;
   "/contacts/$id": typeof ContactsIdRoute;
@@ -102,6 +117,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  "/": typeof IndexRoute;
   "/login": typeof LoginRoute;
   "/register": typeof RegisterRoute;
   "/contacts/$id": typeof ContactsIdRoute;
@@ -111,6 +127,7 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
+  "/": typeof IndexRoute;
   "/login": typeof LoginRoute;
   "/register": typeof RegisterRoute;
   "/contacts/$id": typeof ContactsIdRoute;
@@ -121,6 +138,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
+    | "/"
     | "/login"
     | "/register"
     | "/contacts/$id"
@@ -128,6 +146,7 @@ export interface FileRouteTypes {
     | "/contacts";
   fileRoutesByTo: FileRoutesByTo;
   to:
+    | "/"
     | "/login"
     | "/register"
     | "/contacts/$id"
@@ -135,6 +154,7 @@ export interface FileRouteTypes {
     | "/contacts";
   id:
     | "__root__"
+    | "/"
     | "/login"
     | "/register"
     | "/contacts/$id"
@@ -144,6 +164,7 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute;
   LoginRoute: typeof LoginRoute;
   RegisterRoute: typeof RegisterRoute;
   ContactsIdRoute: typeof ContactsIdRoute;
@@ -152,6 +173,7 @@ export interface RootRouteChildren {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   ContactsIdRoute: ContactsIdRoute,
@@ -169,12 +191,16 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/",
         "/login",
         "/register",
         "/contacts/$id",
         "/contacts/create",
         "/contacts/"
       ]
+    },
+    "/": {
+      "filePath": "index.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
