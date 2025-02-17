@@ -12,7 +12,7 @@ export interface Contact {
   cpf: string;
   address: string;
   neighboor: string;
-  complement: string;
+  complement?: string;
   zipCode: string;
   city: string;
   state: string;
