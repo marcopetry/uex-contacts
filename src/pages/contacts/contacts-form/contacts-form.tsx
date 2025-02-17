@@ -7,6 +7,7 @@ import { contactSchema } from "./validation";
 import { transformCPF, transformPhone, transformZipCode } from "./transforms";
 import { useViaCepApi } from "../../../hooks/use-via-cep-api";
 import { useEffect } from "react";
+import { useGeoLocationApi } from "../../../hooks/use-geolocation-api";
 
 export interface Contact {
   id?: number;
@@ -37,18 +38,24 @@ export const ContactForm = ({ onSubmit, defaultValues }: ContactFormProps) => {
 
   const { data, isLoading } = useViaCepApi({ cep: formProps.watch("zipCode") });
 
+  const { data: geoLocation } = useGeoLocationApi({
+    cep: formProps.watch("zipCode"),
+  });
+
   useEffect(() => {
-    if (data && formProps.formState.isDirty) {
+    if (data && geoLocation && formProps.formState.dirtyFields.zipCode) {
       formProps.reset({
         address: data.logradouro,
         city: data.localidade,
         country: "Brasil",
         state: data.estado,
         neighboor: data.bairro,
-        zipCode: data.cep,
+        latitude: Number(geoLocation[0].lat),
+        longitude: Number(geoLocation[0].lon),
+        zipCode: formProps.watch("zipCode"),
       });
     }
-  }, [data, formProps]);
+  }, [data, formProps, geoLocation]);
 
   return (
     <Container maxWidth="md">
@@ -142,6 +149,7 @@ export const ContactForm = ({ onSubmit, defaultValues }: ContactFormProps) => {
                 name="latitude"
                 label="Latitude"
                 fullWidth
+                disabled
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -150,6 +158,7 @@ export const ContactForm = ({ onSubmit, defaultValues }: ContactFormProps) => {
                 name="longitude"
                 label="Longitude"
                 fullWidth
+                disabled
               />
             </Grid>
 
