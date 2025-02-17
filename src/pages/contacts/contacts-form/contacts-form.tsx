@@ -5,6 +5,8 @@ import { TextFieldForm } from "../../../libs/react-hook-form/text-field-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema } from "./validation";
 import { transformCPF, transformPhone, transformZipCode } from "./transforms";
+import { useViaCepApi } from "../../../hooks/use-via-cep-api";
+import { useEffect } from "react";
 
 export interface Contact {
   id?: number;
@@ -33,6 +35,21 @@ export const ContactForm = ({ onSubmit, defaultValues }: ContactFormProps) => {
     defaultValues,
   });
 
+  const { data, isLoading } = useViaCepApi({ cep: formProps.watch("zipCode") });
+
+  useEffect(() => {
+    if (data && formProps.formState.isDirty) {
+      formProps.reset({
+        address: data.logradouro,
+        city: data.localidade,
+        country: "Brasil",
+        state: data.estado,
+        neighboor: data.bairro,
+        zipCode: data.cep,
+      });
+    }
+  }, [data, formProps]);
+
   return (
     <Container maxWidth="md">
       <Typography variant="h4" gutterBottom>
@@ -53,30 +70,61 @@ export const ContactForm = ({ onSubmit, defaultValues }: ContactFormProps) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextFieldForm name="address" label="Endereço" fullWidth />
+              <TextFieldForm
+                name="address"
+                label="Endereço"
+                fullWidth
+                disabled={isLoading}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextFieldForm name="neighboor" label="Bairro" fullWidth />
+              <TextFieldForm
+                name="neighboor"
+                label="Bairro"
+                fullWidth
+                disabled={isLoading}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextFieldForm name="complement" label="Complemento" fullWidth />
+              <TextFieldForm
+                name="complement"
+                label="Complemento"
+                fullWidth
+                disabled={isLoading}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
               <MaskedTextFieldForm
                 name="zipCode"
                 label="CEP"
                 fullWidth
+                disabled={isLoading}
                 {...transformZipCode}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextFieldForm name="city" label="Cidade" fullWidth />
+              <TextFieldForm
+                name="city"
+                label="Cidade"
+                fullWidth
+                disabled={isLoading}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextFieldForm name="state" label="Estado" fullWidth />
+              <TextFieldForm
+                name="state"
+                label="Estado"
+                fullWidth
+                disabled={isLoading}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextFieldForm name="country" label="País" fullWidth />
+              <TextFieldForm
+                name="country"
+                label="País"
+                fullWidth
+                disabled={isLoading}
+              />
             </Grid>
 
             <Grid item xs={12} sm={6}>
