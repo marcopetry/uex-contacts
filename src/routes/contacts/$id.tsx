@@ -1,11 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { authMiddleware } from "../../auth-middleware";
+import { PageContactUpdate } from "../../pages/contacts/update";
 
 export const Route = createFileRoute("/contacts/$id")({
-  component: RouteComponent,
+  component: PageContactUpdate,
   loader: () => authMiddleware(),
 });
-
-function RouteComponent() {
-  return <div>Hello "/contacts/$id"!</div>;
-}
