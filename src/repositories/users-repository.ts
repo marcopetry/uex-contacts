@@ -9,21 +9,13 @@ export interface User {
 
 export class UserRepository {
   private dbService: IndexedDBService;
-  private dbReady: Promise<void>;
 
   constructor() {
     this.dbService = new IndexedDBService(Stores.Users);
-    this.dbReady = this.dbService.dbReady; // Aguarda o banco abrir
-  }
-
-  private async ensureDBReady(): Promise<void> {
-    await this.dbReady;
   }
 
   // Adicionar um novo usuário
-
   public async createUser(contact: User): Promise<IDBValidKey> {
-    await this.ensureDBReady();
     return this.dbService.create(contact);
   }
 
@@ -36,12 +28,10 @@ export class UserRepository {
   public async getAllUsers(
     filter?: (contact: User) => boolean
   ): Promise<User[]> {
-    await this.ensureDBReady();
     return this.dbService.getAll(filter);
   }
 
   public async getUserByEmail(email: string): Promise<User[]> {
-    await this.ensureDBReady();
     return this.dbService.getAll((user) => user.email === email);
   }
 }
