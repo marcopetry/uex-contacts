@@ -17,25 +17,31 @@ export function useLogin() {
     setMessage("Usuário não encontrado!");
   };
 
-  const onSuccess = (userLogged: User[]) => {
-    if (userLogged[0]) {
-      setCookie(JSON.stringify(userLogged[0]));
-      setIsOpen(true);
-      setMessage("Cadastro feito com sucesso!");
-      router.navigate({
-        href: "/contacts",
-      });
+  const onSuccess = (userLogged: User) => {
+    setCookie(JSON.stringify(userLogged));
+    setIsOpen(true);
+    setMessage("Cadastro feito com sucesso!");
+    router.navigate({
+      href: "/contacts",
+    });
+  };
+
+  const login = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    const users = await userRepository.getAllUsers(
+      (user: User) => user.email === email && user.password === password
+    );
+
+    if (users[0]) {
+      onSuccess(users[0]);
     } else {
       onError();
     }
-  };
-
-  const login = ({ email, password }: { email: string; password: string }) => {
-    userRepository.getAllUsers(
-      onSuccess,
-      onError,
-      (user) => user.email === email && user.password === password
-    );
   };
 
   return {

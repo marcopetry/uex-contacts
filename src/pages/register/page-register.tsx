@@ -10,8 +10,6 @@ import { TextFieldForm } from "../../libs/react-hook-form/text-field-form";
 import { FormProvider, useForm } from "react-hook-form";
 import { useCreateUser } from "../../hooks/use-create-user";
 import { SimpleSnackbar } from "../../ui-components/simple-snack-bar/simple-snack-bar";
-import { useState } from "react";
-import { useRouter } from "@tanstack/react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "./page-register.validation";
 
@@ -25,25 +23,8 @@ export const PageRegister = () => {
   const formProps = useForm<FormValues>({
     resolver: zodResolver(registerSchema),
   });
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState("");
 
-  const router = useRouter();
-
-  const onSuccess = () => {
-    setIsOpen(true);
-    setMessage("Cadastro feito com sucesso!");
-    router.navigate({
-      href: "/login",
-    });
-  };
-
-  const onError = () => {
-    setIsOpen(false);
-    setMessage("Problema com cadastro!");
-  };
-
-  const { createUser } = useCreateUser(onSuccess, onError);
+  const { createUser, isOpen, message, setIsOpen } = useCreateUser();
 
   const onSubmit = (data: FormValues) => {
     createUser(data);
