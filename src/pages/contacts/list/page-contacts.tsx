@@ -1,4 +1,4 @@
-import { Box, Button, Container, Paper } from "@mui/material";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { MapView } from "../../../libs/google-maps";
 import { useListContacts } from "../../../hooks/use-list-contacts";
 import { CardContact } from "../../../ui-components/card-contact";
@@ -46,18 +46,24 @@ export const PageContacts = () => {
           Adicionar contato
         </Button>
         <Box display="flex" flexDirection="column" width={500}>
-          {contacts.map((contact) => (
-            <CardContact
-              key={contact.cpf}
-              contact={contact}
-              onClick={() => {
-                setSelectedContacts(contact);
-              }}
-              onDelete={onOpen}
-              onEdit={() => contact.id && onEdit(contact.id?.toString())}
-              isSelected={selectedContacts?.id === contact.id}
-            />
-          ))}
+          {contacts.length ? (
+            contacts.map((contact) => (
+              <CardContact
+                key={contact.cpf}
+                contact={contact}
+                onClick={() => {
+                  setSelectedContacts(contact);
+                }}
+                onDelete={onOpen}
+                onEdit={() => contact.id && onEdit(contact.id?.toString())}
+                isSelected={selectedContacts?.id === contact.id}
+              />
+            ))
+          ) : (
+            <Typography variant="h6" component="h2">
+              Você não tem contatos cadastrados
+            </Typography>
+          )}
         </Box>
 
         {selectedContacts && (
