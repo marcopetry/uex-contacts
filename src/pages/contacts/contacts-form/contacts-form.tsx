@@ -45,6 +45,7 @@ export const ContactForm = ({ onSubmit, defaultValues }: ContactFormProps) => {
   useEffect(() => {
     if (data && geoLocation && formProps.formState.dirtyFields.zipCode) {
       formProps.reset({
+        ...formProps.getValues(),
         address: data.logradouro,
         city: data.localidade,
         country: "Brasil",
