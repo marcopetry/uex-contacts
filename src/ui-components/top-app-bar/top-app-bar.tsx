@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { CookiesKeys, useCookie } from "../../hooks/use-cookies";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
@@ -66,17 +65,9 @@ export const TopAppBar = () => {
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
-                sx={{ ml: "auto" }}
+                sx={{ ml: "auto", color: "white" }}
               >
-                <IconButton
-                  size="large"
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  sx={{ mr: 2, color: "white" }}
-                >
-                  <MenuIcon />
-                </IconButton>
+                <MenuIcon />
               </Button>
               <Menu
                 id="basic-menu"
