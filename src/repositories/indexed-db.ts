@@ -1,5 +1,5 @@
 export const INDEXED_DB_NAME = "uex_store";
-const INDEX_DB_VERSION = 2;
+const INDEX_DB_VERSION = 4;
 
 export enum Stores {
   Users = "users",
@@ -21,7 +21,8 @@ export class IndexedDBService {
       const request = indexedDB.open(INDEXED_DB_NAME, INDEX_DB_VERSION);
 
       request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
-        const db = (event.target as IDBRequest).result;
+        const db: IDBDatabase = (event.target as IDBRequest).result;
+
         Object.values(Stores).forEach((storeName) => {
           if (!db.objectStoreNames.contains(storeName)) {
             db.createObjectStore(storeName, {
@@ -30,6 +31,16 @@ export class IndexedDBService {
             });
           }
         });
+
+        const userStore = (
+          event.currentTarget as IDBRequest
+        ).transaction!.objectStore(Stores.Users);
+        const contactsStore = (
+          event.currentTarget as IDBRequest
+        ).transaction!.objectStore(Stores.Contacts);
+
+        userStore.createIndex("emailIndex", "email", { unique: true });
+        contactsStore.createIndex("cpfIndex", "cpf", { unique: true });
       };
 
       request.onsuccess = (event: Event) => {
