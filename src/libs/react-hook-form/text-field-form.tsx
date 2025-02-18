@@ -34,6 +34,7 @@ export const TextFieldForm = ({
       }}
       error={!!error}
       helperText={error?.message}
+      InputLabelProps={{ shrink: true }}
     />
   );
 };
