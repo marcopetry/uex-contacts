@@ -39,4 +39,9 @@ export class UserRepository {
     await this.ensureDBReady();
     return this.dbService.getAll(filter);
   }
+
+  public async getUserByEmail(email: string): Promise<User[]> {
+    await this.ensureDBReady();
+    return this.dbService.getAll((user) => user.email === email);
+  }
 }
