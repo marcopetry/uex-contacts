@@ -30,7 +30,6 @@ export function useCreateContacts() {
   const contactsReposiroty = new ContactsRepository();
 
   const onSubmit = async (data: Contact) => {
-    console.log({ data });
     try {
       await contactsReposiroty.createContact({
         ...data,
