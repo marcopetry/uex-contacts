@@ -3,7 +3,7 @@ import {
   Contact,
 } from "../repositories/contacts-repository";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CookiesKeys, useCookie } from "./use-cookies";
 
 export function useListContacts() {
@@ -11,22 +11,23 @@ export function useListContacts() {
 
   const [contacts, setContacts] = useState<Contact[]>([]);
 
-  useEffect(() => {
-    const getContacts = async () => {
-      const contactsReposiroty = new ContactsRepository();
-      if (cookieValue?.email) {
-        const contactsResponse = await contactsReposiroty.getAllContactsByUser(
-          cookieValue?.email
-        );
+  const getContacts = useCallback(async () => {
+    const contactsReposiroty = new ContactsRepository();
+    if (cookieValue?.email) {
+      const contactsResponse = await contactsReposiroty.getAllContactsByUser(
+        cookieValue?.email
+      );
 
-        setContacts(contactsResponse);
-      }
-    };
-
-    getContacts();
+      setContacts(contactsResponse);
+    }
   }, [cookieValue?.email]);
+
+  useEffect(() => {
+    getContacts();
+  }, [cookieValue?.email, getContacts]);
 
   return {
     contacts,
+    getContacts,
   };
 }
