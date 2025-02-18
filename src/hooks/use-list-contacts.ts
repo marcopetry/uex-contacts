@@ -19,7 +19,9 @@ export function useListContacts({ q }: { q: string }) {
       );
 
       const contactsFiltered = contactsResponse.filter(
-        (contact) => contact.name.includes(q) || contact.cpf.includes(q)
+        (contact) =>
+          contact.name.toLowerCase().includes(q.toLowerCase()) ||
+          contact.cpf.includes(q)
       );
 
       setContacts(contactsFiltered);
