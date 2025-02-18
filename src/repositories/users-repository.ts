@@ -9,44 +9,34 @@ export interface User {
 
 export class UserRepository {
   private dbService: IndexedDBService;
+  private dbReady: Promise<void>;
 
   constructor() {
     this.dbService = new IndexedDBService(Stores.Users);
+    this.dbReady = this.dbService.dbReady; // Aguarda o banco abrir
+  }
+
+  private async ensureDBReady(): Promise<void> {
+    await this.dbReady;
   }
 
   // Adicionar um novo usuário
-  public createUser<User>(
-    user: User,
-    onSuccess: () => void,
-    onError: (error: unknown) => void
-  ): void {
-    this.dbService.create(user, onSuccess, onError);
-  }
 
-  // Atualizar um usuário existente
-  public updateUser<User>(
-    user: User,
-    onSuccess: () => void,
-    onError: (error: unknown) => void
-  ): void {
-    this.dbService.put(user, onSuccess, onError);
+  public async createUser(contact: User): Promise<IDBValidKey> {
+    await this.ensureDBReady();
+    return this.dbService.create(contact);
   }
 
   // Buscar um usuário pelo ID
-  public getUserById<User>(
-    id: number,
-    onSuccess: (user: User | null) => void,
-    onError: (error: unknown) => void
-  ): void {
-    this.dbService.getById(id, onSuccess, onError);
+  public deleteUser(id: number): Promise<void> {
+    return this.dbService.delete(id);
   }
 
   // Buscar todos os usuários
-  public getAllUsers<User>(
-    onSuccess: (users: User[]) => void,
-    onError: (error: unknown) => void,
-    filter?: (users: User) => boolean
-  ): void {
-    this.dbService.getAll(onSuccess, onError, filter);
+  public async getAllUsers(
+    filter?: (contact: User) => boolean
+  ): Promise<User[]> {
+    await this.ensureDBReady();
+    return this.dbService.getAll(filter);
   }
 }
