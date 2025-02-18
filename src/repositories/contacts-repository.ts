@@ -45,6 +45,11 @@ export class ContactsRepository {
     return this.dbService.getById(id);
   }
 
+  public async deleteContact(id: number): Promise<void> {
+    await this.ensureDBReady();
+    return this.dbService.delete(id);
+  }
+
   public async getAllContacts(
     filter?: (contact: Contact) => boolean
   ): Promise<Contact[]> {
