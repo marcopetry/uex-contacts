@@ -61,4 +61,14 @@ export class ContactsRepository {
     await this.ensureDBReady();
     return this.dbService.getAll((user) => user.ownerEmail === ownerEmail);
   }
+
+  public async deleteAllContactsByUser(ownerEmail: string): Promise<void> {
+    await this.ensureDBReady();
+    const contacts = await this.dbService.getAll(
+      (user: Contact) => user.ownerEmail === ownerEmail
+    );
+    contacts.forEach(async (contact) => {
+      await this.dbService.delete(contact.id!);
+    });
+  }
 }
