@@ -1,8 +1,15 @@
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { MapView } from "../../../libs/google-maps";
 import { useListContacts } from "../../../hooks/use-list-contacts";
 import { CardContact } from "../../../ui-components/card-contact";
-import { useRouter } from "@tanstack/react-router";
+import { useRouter, useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 import { Contact } from "../../../repositories/contacts-repository";
 import { useDisclousure } from "../../../hooks/use-disclousure";
@@ -11,7 +18,9 @@ import { useDeleteContact } from "../../../hooks/use-delete-contacts";
 import { SimpleSnackbar } from "../../../ui-components/simple-snack-bar/simple-snack-bar";
 
 export const PageContacts = () => {
-  const { contacts, getContacts } = useListContacts();
+  const search = useSearch({ from: "/contacts/" });
+  const { contacts, getContacts } = useListContacts({ q: search.q });
+
   const [selectedContacts, setSelectedContacts] = useState<Contact | null>(
     null
   );
@@ -45,7 +54,20 @@ export const PageContacts = () => {
         >
           Adicionar contato
         </Button>
+
         <Box display="flex" flexDirection="column" width={500}>
+          <TextField
+            sx={{ mb: 5 }}
+            label="Filtrar por nome ou cpf"
+            onChange={(e) =>
+              navigate({
+                replace: true,
+                search: { q: e.target.value },
+                to: "/contacts",
+              })
+            }
+          />
+
           {contacts.length ? (
             contacts.map((contact) => (
               <CardContact

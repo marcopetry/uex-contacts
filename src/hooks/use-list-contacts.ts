@@ -6,7 +6,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { CookiesKeys, useCookie } from "./use-cookies";
 
-export function useListContacts() {
+export function useListContacts({ q }: { q: string }) {
   const { cookieValue } = useCookie(CookiesKeys.Auth);
 
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -18,13 +18,17 @@ export function useListContacts() {
         cookieValue?.email
       );
 
-      setContacts(contactsResponse);
+      const contactsFiltered = contactsResponse.filter(
+        (contact) => contact.name.includes(q) || contact.cpf.includes(q)
+      );
+
+      setContacts(contactsFiltered);
     }
-  }, [cookieValue?.email]);
+  }, [cookieValue?.email, q]);
 
   useEffect(() => {
     getContacts();
-  }, [cookieValue?.email, getContacts]);
+  }, [cookieValue?.email, getContacts, q]);
 
   return {
     contacts,
