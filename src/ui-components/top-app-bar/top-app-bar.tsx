@@ -71,6 +71,13 @@ export const TopAppBar = () => {
                 onClick={handleClick}
                 sx={{ ml: "auto", color: "white" }}
               >
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ flexGrow: 1, color: "white", mr: 8 }}
+                >
+                  {"Olá, " + cookieValue.name}
+                </Typography>
                 <MenuIcon />
               </Button>
               <Menu
