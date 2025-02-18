@@ -69,6 +69,7 @@ export const PageContacts = () => {
         {selectedContacts && (
           <Paper elevation={3} sx={{ padding: 3, display: "flex", flex: 1 }}>
             <MapView
+              key={`${selectedContacts.latitude} + ${selectedContacts.longitude}`}
               center={{
                 lat: selectedContacts.latitude,
                 lng: selectedContacts.longitude,
