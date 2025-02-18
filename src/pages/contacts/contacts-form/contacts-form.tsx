@@ -50,8 +50,8 @@ export const ContactForm = ({ onSubmit, defaultValues }: ContactFormProps) => {
         country: "Brasil",
         state: data.estado,
         neighboor: data.bairro,
-        latitude: Number(geoLocation[0].lat),
-        longitude: Number(geoLocation[0].lon),
+        latitude: geoLocation[0] ? Number(geoLocation[0].lat) : undefined,
+        longitude: geoLocation[0] ? Number(geoLocation[0].lon) : undefined,
         zipCode: formProps.watch("zipCode"),
       });
     }
@@ -149,7 +149,7 @@ export const ContactForm = ({ onSubmit, defaultValues }: ContactFormProps) => {
                 name="latitude"
                 label="Latitude"
                 fullWidth
-                disabled
+                disabled={!!geoLocation?.[0]}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -158,7 +158,7 @@ export const ContactForm = ({ onSubmit, defaultValues }: ContactFormProps) => {
                 name="longitude"
                 label="Longitude"
                 fullWidth
-                disabled
+                disabled={!!geoLocation?.[0]}
               />
             </Grid>
 
