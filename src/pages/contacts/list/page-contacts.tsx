@@ -5,12 +5,20 @@ import { CardContact } from "../../../ui-components/card-contact";
 import { useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import { Contact } from "../../../repositories/contacts-repository";
+import { useDisclousure } from "../../../hooks/use-disclousure";
+import { DialogConfirmation } from "../../../ui-components/dialog-confirmation";
+import { useDeleteContact } from "../../../hooks/use-delete-contacts";
+import { SimpleSnackbar } from "../../../ui-components/simple-snack-bar/simple-snack-bar";
 
 export const PageContacts = () => {
-  const { contacts } = useListContacts();
+  const { contacts, getContacts } = useListContacts();
   const [selectedContacts, setSelectedContacts] = useState<Contact | null>(
     null
   );
+
+  const { isOpen, onClose, onOpen } = useDisclousure();
+
+  const { onDelete, ...snackbarProps } = useDeleteContact();
 
   const { navigate } = useRouter();
 
@@ -45,6 +53,7 @@ export const PageContacts = () => {
               onClick={() => {
                 setSelectedContacts(contact);
               }}
+              onDelete={onOpen}
               onEdit={() => contact.id && onEdit(contact.id?.toString())}
               isSelected={selectedContacts?.id === contact.id}
             />
@@ -62,6 +71,22 @@ export const PageContacts = () => {
           </Paper>
         )}
       </Container>
+
+      {isOpen && (
+        <DialogConfirmation
+          isOpen
+          title="Excluir contato"
+          description="Tem certeza que deseja excluir esse contato?"
+          onCancel={onClose}
+          onConfirm={() => {
+            if (selectedContacts?.id) onDelete(selectedContacts?.id);
+            onClose();
+            getContacts();
+            setSelectedContacts(null);
+          }}
+        />
+      )}
+      <SimpleSnackbar {...snackbarProps} />
     </>
   );
 };
