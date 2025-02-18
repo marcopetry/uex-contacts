@@ -47,7 +47,11 @@ export const TopAppBar = () => {
     <Box sx={{ flexGrow: 1 }} key={pathname}>
       <AppBar position="fixed" style={{ width: "100%" }}>
         <Toolbar>
-          <Link to="/contacts" style={{ textDecoration: "none" }}>
+          <Link
+            to="/contacts"
+            search={{ q: "" }}
+            style={{ textDecoration: "none" }}
+          >
             <Typography
               variant="h6"
               component="div"
