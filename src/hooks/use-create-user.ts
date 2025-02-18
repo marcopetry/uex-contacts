@@ -2,6 +2,11 @@ import { useState } from "react";
 import { UserRepository, User } from "../repositories/users-repository";
 import { useRouter } from "@tanstack/react-router";
 
+const error: Record<string, string> = {
+  "Unable to add key to index 'emailIndex': at least one key does not satisfy the uniqueness requirements.":
+    "Este email já está cadastrado",
+};
+
 export function useCreateUser() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -16,19 +21,23 @@ export function useCreateUser() {
     });
   };
 
-  const onError = () => {
-    setIsOpen(false);
-    setMessage("Problema com cadastro!");
+  const onError = (msg?: string) => {
+    setIsOpen(true);
+    setMessage(msg ?? "Problema com cadastro!");
   };
 
   const userRepository = new UserRepository();
 
   const createUser = async (user: User) => {
-    const newId = await userRepository.createUser(user);
-    if (newId) {
-      onSuccess();
-    } else {
-      onError();
+    try {
+      const newId = await userRepository.createUser(user);
+      if (newId) {
+        onSuccess();
+      } else {
+        onError();
+      }
+    } catch (er) {
+      onError(error[(er as unknown as Error).message]);
     }
   };
 

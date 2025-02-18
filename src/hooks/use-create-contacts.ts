@@ -6,6 +6,11 @@ import { useRouter } from "@tanstack/react-router";
 import { CookiesKeys, useCookie } from "./use-cookies";
 import { User } from "../repositories/users-repository";
 
+const error: Record<string, string> = {
+  "Unable to add key to index 'cpfIndex': at least one key does not satisfy the uniqueness requirements.":
+    "Cpf já cadastradado",
+};
+
 export function useCreateContacts() {
   const { cookieValue } = useCookie(CookiesKeys.Auth);
 
@@ -14,9 +19,9 @@ export function useCreateContacts() {
 
   const router = useRouter();
 
-  const onError = () => {
+  const onError = (msg?: string) => {
     setOpen(true);
-    setMessage("Problema ao cadastrar contato!");
+    setMessage(msg ?? "Problema ao cadastrar contato!");
   };
 
   const onSuccess = () => {
@@ -37,8 +42,8 @@ export function useCreateContacts() {
       });
 
       onSuccess();
-    } catch {
-      onError();
+    } catch (er) {
+      onError(error[(er as Error).message]);
     }
   };
 
