@@ -1,50 +1,62 @@
-# React + TypeScript + Vite
+# Contact List - IndexedDB Study
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project aims to study IndexedDB in the browser using a repository system on the front end. The application consists of a contact list that allows adding, editing, removing, and searching for contacts stored locally in IndexedDB.
 
-Currently, two official plugins are available:
+## Technologies Used
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The project was developed using the following technologies:
 
-## Expanding the ESLint configuration
+- **React 19** - Library for building the interface.
+- **Material UI (MUI)** - Styled component framework for React.
+- **React Hook Form** - Library for form management.
+- **Zod** - Data schema validation.
+- **TanStack Query & Router** - Asynchronous state management and routing.
+- **Axios** - HTTP client for requests.
+- **IndexedDB** - Browser local database for offline storage.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Dependencies
 
-- Configure the top-level `parserOptions` property like this:
+### Styling
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **@emotion/react** & **@emotion/styled**: Used for dynamic component styling.
+- **@mui/material** & **@mui/icons-material**: UI components and icons based on Material Design.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### State Management and Routing
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- **@tanstack/react-query**: Cache management and asynchronous requests.
+- **@tanstack/react-router**: React-based routing for navigation in the application.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Forms and Validation
+
+- **react-hook-form**: Efficient form management.
+- **@hookform/resolvers**: Integration of react-hook-form with validation libraries.
+- **zod**: Definition and validation of data schemas.
+
+### Integrations and Utilities
+
+- **axios**: HTTP client for external API communication.
+- **js-cookie**: Cookie management for data persistence.
+- **@vis.gl/react-google-maps**: Integration with Google Maps for contact location.
+
+## How to Run
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-username/your-repository.git
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Run the project:
+   ```sh
+   npm start
+   ```
+
+## Study Objective
+
+This project explores the use of **IndexedDB** in the browser for persistent and efficient data storage, along with the implementation of **repositories** on the front end to standardize communication with the local database. The study also covers best practices in building forms, data validation, and state management in React.
+
+---
+
+If you have suggestions or want to contribute, feel free to open an issue or pull request!
